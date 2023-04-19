@@ -1,8 +1,10 @@
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express";
-import teamsRoutes from "./routes/teams";
-import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
+import morgan from "morgan";
+
+import teamsRoutes from "./routes/teams";
+import usersRoutes from "./routes/users"
 
 const app = express();
 
@@ -11,6 +13,7 @@ app.use(morgan("dev"));
 // allow express to accept json bodies
 app.use(express.json());
 
+app.use("/api/users/", usersRoutes);
 app.use("/api/teams", teamsRoutes);
 
 app.use((req, res, next) => {

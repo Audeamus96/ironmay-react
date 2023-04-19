@@ -9,4 +9,8 @@ router.get("/:teamId", TeamsController.getTeam);
 
 router.post("/", TeamsController.createTeam);
 
+router.patch("/:teamId", TeamsController.updateTeam);
+
+router.delete("/:teamId", TeamsController.deleteTeam);
+
 export default router;

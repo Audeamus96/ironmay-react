@@ -33,7 +33,13 @@ function App() {
         Add Team
       </Button>
       {showAddTeamDialog && 
-        <AddTeamDialog  onDismiss={() => setShowAddTeamDialog(false)}/>
+        <AddTeamDialog  
+            onDismiss={() => setShowAddTeamDialog(false)}
+            onTeamSaved={(newTeam) => {
+                setTeams([...teams, newTeam])
+                setShowAddTeamDialog(false);
+            }}
+        />
       }
     </div>
   );

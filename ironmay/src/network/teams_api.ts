@@ -21,7 +21,7 @@ export interface TeamInput{
     name: string,
 }
 export async function createTeam(team: TeamInput): Promise<Team> {
-    const response = await fetchWithError("/api/notes", 
+    const response = await fetchWithError("/api/teams", 
     {
         method: "POST",
         headers: {

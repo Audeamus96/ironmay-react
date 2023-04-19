@@ -3,15 +3,18 @@ import logo from './logo.svg';
 import { Button } from 'react-bootstrap';
 import { Team as TeamModel } from './models/team';
 import Team from './components/Team';
+import * as TeamsApi from "./network/teams_api";
+import AddTeamDialog from './components/AddTeamDialog';
 
 function App() {
   const [teams, setTeams] = useState<TeamModel[]>([]);
 
+  const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
+
   useEffect(() => {
     async function loadTeams(){
         try {
-            const response = await fetch("/api/teams", {method: "GET"});
-            const teams = await response.json();
+            const teams = await TeamsApi.fetchTeams();
             setTeams(teams);
         } catch (error) {
             console.error(error);
@@ -26,6 +29,12 @@ function App() {
       {teams.map(team => (
         <Team team={team} key={team.name}/>
       ))}
+      <Button onClick={() => setShowAddTeamDialog(true)}>
+        Add Team
+      </Button>
+      {showAddTeamDialog && 
+        <AddTeamDialog  onDismiss={() => setShowAddTeamDialog(false)}/>
+      }
     </div>
   );
 }

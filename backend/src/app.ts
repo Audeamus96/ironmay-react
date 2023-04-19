@@ -1,8 +1,11 @@
 import "dotenv/config"
 import express, { NextFunction, Request, Response } from "express";
 import teamsRoutes from "./routes/teams";
+import morgan from "morgan";
 
 const app = express();
+
+app.use(morgan("dev"));
 
 // allow express to accept json bodies
 app.use(express.json());

@@ -6,7 +6,7 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true},
     team: {type: Schema.Types.ObjectId, ref:'Team', required: true},
-});
+}, { timestamps: true });
 
 type User = InferSchemaType<typeof userSchema>;
 

@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
 import { Button } from 'react-bootstrap';
+import { Team as TeamModel } from './models/team';
+import Team from './components/Team';
 
 function App() {
-  const [clickCount, setClickCount] = useState(0);
+  const [teams, setTeams] = useState<TeamModel[]>([]);
+
+  useEffect(() => {
+    async function loadTeams(){
+        try {
+            const response = await fetch("/api/teams", {method: "GET"});
+            const teams = await response.json();
+            setTeams(teams);
+        } catch (error) {
+            console.error(error);
+            alert(error);
+        }
+    }
+    loadTeams();
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Button onClick={() => setClickCount(clickCount+1)}>
-            Click {clickCount} Me
-        </Button>
-      </header>
+    <div>
+      {teams.map(team => (
+        <Team team={team} key={team.name}/>
+      ))}
     </div>
   );
 }

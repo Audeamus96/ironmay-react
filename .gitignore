@@ -1,7 +1,6 @@
 node_modules/
-package-lock.json
 
-# Everything below is from: https://github.com/github/gitignore/blob/main/Node.gitignore
+# --- Everything below is from: https://github.com/github/gitignore/blob/main/Node.gitignore ---
 # Logs
 logs
 *.log

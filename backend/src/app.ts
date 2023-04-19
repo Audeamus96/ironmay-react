@@ -4,6 +4,9 @@ import teamsRoutes from "./routes/teams";
 
 const app = express();
 
+// allow express to accept json bodies
+app.use(express.json());
+
 app.use("/api/teams", teamsRoutes);
 
 app.use((req, res, next) => {

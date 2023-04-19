@@ -1,0 +1,3 @@
+Commands:
+    node start      - starts backend server
+    node run lint   - runs eslint on all typescript code 

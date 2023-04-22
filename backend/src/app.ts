@@ -8,6 +8,8 @@ import MongoStore from "connect-mongo";
 
 import teamsRoutes from "./routes/teams";
 import usersRoutes from "./routes/users"
+import activityRoutes from "./routes/activities"
+import { requiresAuth } from "./middleware/auth";
 
 const app = express();
 
@@ -31,6 +33,7 @@ app.use(session({
 
 app.use("/api/users/", usersRoutes);
 app.use("/api/teams", teamsRoutes);
+app.use("/api/activities", requiresAuth ,activityRoutes);
 
 app.use((req, res, next) => {
     next(createHttpError(404, "Endpoint not found"));

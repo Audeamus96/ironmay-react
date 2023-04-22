@@ -4,29 +4,49 @@ import { Button } from 'react-bootstrap';
 import { Team as TeamModel } from './models/team';
 import Team from './components/Team';
 import * as TeamsApi from "./network/teams_api";
+import * as UserApi from "./network/users_api";
 import AddTeamDialog from './components/AddTeamDialog';
 import NavBar from './components/NavBar';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import LoginPage from "./pages/Login"
+import { User } from "./models/user"
 
 function App() {
-  const [teams, setTeams] = useState<TeamModel[]>([]);
 
-  const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    async function loadTeams(){
-        try {
-            const teams = await TeamsApi.fetchTeams();
-            setTeams(teams);
-        } catch (error) {
-            console.error(error);
-            alert(error);
+    useEffect(() => {
+        async function fetchLoggedInUser() {
+            try {
+                const user = await UserApi.getLoggedInUser();
+                setLoggedInUser(user);
+            } catch (error) {
+                console.error(error);
+            }
         }
-    }
-    loadTeams();
-  }, []);
+        fetchLoggedInUser();
+    }, []);
+
+//   const [teams, setTeams] = useState<TeamModel[]>([]);
+
+//   const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
+
+//   useEffect(() => {
+//     async function loadTeams(){
+//         try {
+//             const teams = await TeamsApi.fetchTeams();
+//             setTeams(teams);
+//         } catch (error) {
+//             console.error(error);
+//             alert(error);
+//         }
+//     }
+//     loadTeams();
+//   }, []);
 
   return (
-    <div>
+    <>
+    {/* <div>
       <NavBar 
         loggedInUser={null}
         onLogoutSuccessfull={() => {}}
@@ -46,7 +66,14 @@ function App() {
             }}
         />
       }
-    </div>
+    </div> */}
+    <Router>
+        <Routes>
+            <Route path="login" element={<LoginPage />} />
+        </Routes>
+    </Router>
+    
+    </>
   );
 }
 

@@ -1,6 +1,6 @@
 import { Button, Container, Navbar, NavbarBrand } from "react-bootstrap";
 import { User } from "../models/user";
-import * as UserApi from "../network/users_apis"
+import * as UserApi from "../network/users_api"
 
 interface NavBarProps{
     loggedInUser: User | null,

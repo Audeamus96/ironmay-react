@@ -5,6 +5,7 @@ import { Team as TeamModel } from './models/team';
 import Team from './components/Team';
 import * as TeamsApi from "./network/teams_api";
 import AddTeamDialog from './components/AddTeamDialog';
+import NavBar from './components/NavBar';
 
 function App() {
   const [teams, setTeams] = useState<TeamModel[]>([]);
@@ -26,6 +27,10 @@ function App() {
 
   return (
     <div>
+      <NavBar 
+        loggedInUser={null}
+        onLogoutSuccessfull={() => {}}
+      />
       {teams.map(team => (
         <Team team={team} key={team.name}/>
       ))}

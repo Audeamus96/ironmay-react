@@ -1,31 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from 'react';
+import { Button, Container, Form } from "react-bootstrap";
 
-import { Team as TeamModel } from '../models/team';
-import Team from '../components/Team';
-import * as TeamsApi from "../network/teams_api";
+import AuthContext from "../context/AuthProvider";
 
 const Login = () => {
 
-  const [teams, setTeams] = useState<TeamModel[]>([]);
-
-  const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
-
-  useEffect(() => {
-    async function loadTeams(){
-        try {
-            const teams = await TeamsApi.fetchTeams();
-            setTeams(teams);
-        } catch (error) {
-            console.error(error);
-            alert(error);
-        }
-    }
-    loadTeams();
-  }, []);
-
-
     return (
+        <Container>
         <Form>
             <Form.Group className="mb-3">
                 <Form.Label>Email address</Form.Label>
@@ -35,12 +16,17 @@ const Login = () => {
             <Form.Group className="mb-3">
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" />
+                {/* <Form.Text muted>
+                    Forgot password? click <a href="#">here</a> to reset it.
+                </Form.Text> */}
             </Form.Group>
 
             <Button variant="primary" type="submit">
-                Submit
+                Sign In
             </Button>
         </Form>
+
+        </Container>
       );
 }
  

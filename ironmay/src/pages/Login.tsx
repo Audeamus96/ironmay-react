@@ -1,17 +1,20 @@
 // import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Form } from "react-bootstrap";
-import { useForm } from 'react-hook-form'; 
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import AuthContext from "../context/AuthProvider";
 import { LoginCredentials } from '../network/users_api';
 import * as UserApi from '../network/users_api';
 
 const Login = () => {
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<LoginCredentials>();
 
     async function onSubmit(input: LoginCredentials) {
         try {
           await UserApi.login(input);
+          navigate("/home");
         } catch (error) {
             console.error(error);
             alert(error);
@@ -20,6 +23,7 @@ const Login = () => {
 
     return (
         <Container>
+        <h1>Sign In</h1>
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3">
                 <Form.Label>Email address</Form.Label>

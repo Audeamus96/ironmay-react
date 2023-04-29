@@ -1,4 +1,4 @@
-// import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Button, Container, Form } from "react-bootstrap";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +9,17 @@ import * as UserApi from '../network/users_api';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { setAuth } = useContext(AuthContext);
     const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<LoginCredentials>();
 
     async function onSubmit(input: LoginCredentials) {
         try {
-          await UserApi.login(input);
+          const user = await UserApi.login(input);
+          console.log(user);
+          setAuth(user);
           navigate("/home");
         } catch (error) {
+            setAuth(null);
             console.error(error);
             alert(error);
         }

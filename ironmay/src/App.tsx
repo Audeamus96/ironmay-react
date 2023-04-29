@@ -7,18 +7,14 @@ import AuthContext, { AuthContextProvider } from "./context/AuthProvider";
 import { User } from "./models/user";
 
 function App() {
-    // const [auth, setAuth] = useState<User | null>(null);
-    const { auth, setAuth } = useContext(AuthContext)
+    const [auth, setAuth] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    // const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
     useEffect(() => {
         async function fetchLoggedInUser() {
             try {
                 const user = await UserApi.getLoggedInUser();
-                console.log(user);
                 setAuth(user);
-                console.log(auth?.firstName);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -26,7 +22,7 @@ function App() {
             }
         }
         fetchLoggedInUser();
-    });
+    }, [setAuth]);
 
     if(isLoading) {
         return <div>Loading</div>;

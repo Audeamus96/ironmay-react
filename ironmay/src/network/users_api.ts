@@ -14,7 +14,15 @@ async function fetchWithError(input: RequestInfo, init?: RequestInit){
 
 export async function getLoggedInUser(): Promise<User> {
     const response = await fetchWithError("/api/users/", {method: "GET"});
-    return response.json();
+    const userData = await response.json();
+    const user: User = {
+        _id: userData._id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        team: userData.team
+    }
+    return user;
 }
 
 export interface SignUpCredentials {
@@ -56,4 +64,16 @@ export async function login(credentials: LoginCredentials): Promise<User> {
 
 export async function logout() {
     await fetchWithError("api/users/logout", {method: "POST"});
+}
+
+export async function getUsersData(): Promise<User[]> {
+    const response = await fetchWithError("/api/users/all", {method: "GET"});
+    const users = await response.json();
+    return users.map((user: any) => ({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        team: user.team
+    })) as User[]
 }

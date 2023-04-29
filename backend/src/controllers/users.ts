@@ -15,6 +15,15 @@ export const getAuthenticatedUser: RequestHandler =async (req, res, next) => {
     }
 }
 
+export const getUsers: RequestHandler =async (req, res, next) => {
+    try {
+        const users = await UserModel.find().exec();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+}
+
 // values have to be optional because we don't know if user sent them or not
 interface SignUpBody {
     firstName?: string,

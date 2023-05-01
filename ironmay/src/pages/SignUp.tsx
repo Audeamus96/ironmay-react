@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Form, Col, Row } from "react-bootstrap";
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
 
 import '../styles/login.css';
+import styleUtils from '../styles/utils.module.css';
 
 import { Team as TeamModel } from '../models/team';
 import * as TeamsApi from "../network/teams_api";
@@ -17,6 +20,7 @@ const SignUp = () => {
   async function onSubmit(input: SignUpCredentials) {
     try {
       await UserApi.signUp(input);
+      navigate("/home");
     } catch (error) {
         console.error(error);
         alert(error);
@@ -24,6 +28,7 @@ const SignUp = () => {
   }
 
   // adding/displaying teams
+  const navigate = useNavigate();
   const [teams, setTeams] = useState<TeamModel[]>([]);
   const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
   const [teamCreatedAlert, showTeamCreatedAlert] = useState(false);
@@ -129,10 +134,15 @@ const SignUp = () => {
         <Button 
           variant="primary"
           type="submit"
+          className={styleUtils.width100}
           disabled={isSubmitting}
           >
             Submit
         </Button>
+        <br/>
+        <Form.Text muted>
+           Already a user? click <a href="/login">here</a> to login up.
+        </Form.Text>
       </Form>
      
       {showAddTeamDialog && (

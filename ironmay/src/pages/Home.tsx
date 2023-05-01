@@ -63,7 +63,7 @@ const Home = () => {
 
     useEffect (() => {
         if (!auth){
-            console.error("NOT AUTHORIZED");
+            console.error("NOT AUTHORIZED - redirecting to login");
             navigate("/login");
         }
     }, [auth, navigate]);

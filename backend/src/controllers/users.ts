@@ -68,9 +68,9 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
             team: team,
         });
 
-        req.session.userId = newUser._id;
+        // req.session.userId = newUser._id;
 
-        res.status(201).json(newUser);
+        res.status(201).json(newUser._id);
 
     } catch (error) {
         next(error);

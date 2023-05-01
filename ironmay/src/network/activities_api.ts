@@ -37,3 +37,23 @@ export async function getAllActivities(): Promise<Activity[]> {
         createdAt: activity.createdAt
     })) as Activity[]
 }
+
+export interface ActivityCreationBody {
+    activity_type: string,
+    distance: number,
+    user: string,
+    team: string,
+}
+
+export async function createActivity(activityBody: ActivityCreationBody): Promise<Activity> {
+    console.log(activityBody);
+    const response = await fetchWithError("/api/activities/",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(activityBody),
+    })
+    return response.json();
+}

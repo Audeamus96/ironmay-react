@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Col, Row } from "react-bootstrap";
 import { useForm } from 'react-hook-form';
 
+import '../styles/login.css';
+
 import { Team as TeamModel } from '../models/team';
-import Team from '../components/Team';
 import * as TeamsApi from "../network/teams_api";
 import AddTeamDialog from '../components/AddTeamDialog';
 import { SignUpCredentials } from '../network/users_api';
 import * as UserApi from '../network/users_api';
-
+import TempAlert from '../components/TempAlert';
 
 const SignUp = () => {
   const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<SignUpCredentials>();
@@ -20,11 +21,12 @@ const SignUp = () => {
         console.error(error);
         alert(error);
     }
-}
+  }
 
   // adding/displaying teams
   const [teams, setTeams] = useState<TeamModel[]>([]);
   const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
+  const [teamCreatedAlert, showTeamCreatedAlert] = useState(false);
 
   useEffect(() => {
     async function loadTeams() {
@@ -40,9 +42,15 @@ const SignUp = () => {
   }, []);
 
   return (
-    <Container>
+    <div className='bg'>
+    {teamCreatedAlert && (
+        <TempAlert variant='success' message='Team successfully created!'/>
+    )}
+    <Container className='main template justify-content-center aligh-items-center 100-w 100-vh'>
+    <Row className="justify-content-md-center">
+     <Col lg={6} className='form'>
+      <h1 className='alignCenter'> Sign up</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
-
         <Form.Group className="mb-3">
           <Form.Label>First Name</Form.Label>
           <Form.Control 
@@ -126,18 +134,21 @@ const SignUp = () => {
             Submit
         </Button>
       </Form>
-
+     
       {showAddTeamDialog && (
         <AddTeamDialog
           onDismiss={() => setShowAddTeamDialog(false)}
           onTeamSaved={(newTeam) => {
             setTeams([...teams, newTeam]);
             setShowAddTeamDialog(false);
+            showTeamCreatedAlert(true);
           }}
         />
       )}
-
+      </Col>
+      </Row>      
     </Container>
+    </div>
   );
 };
  

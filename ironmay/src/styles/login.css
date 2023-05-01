@@ -1,0 +1,25 @@
+.main {
+    height: 100vh;
+    padding-top: 20%;
+    border:10px;
+  }
+
+.form {
+    padding: 20px;
+    border-style: solid;
+    border-radius: 12px;
+    border-width: thin;
+    background-color: white;
+    opacity: 97%;
+}
+
+.bg {
+    background-image: url("../../public/img/welcome.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.alignCenter {
+    text-align: center;
+}
+  

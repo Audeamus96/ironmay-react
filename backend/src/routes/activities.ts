@@ -3,9 +3,11 @@ import * as ActivityController from "../controllers/activities";
 
 const router = express.Router();
 
-router.get("/", ActivityController.getActivities)
+router.get("/", ActivityController.getActivities);
 
-// router.post("/", ActivityController.createActivity);
+router.get("/all", ActivityController.getAllActivities);
+
+router.post("/", ActivityController.createActivity);
 
 // router.get("/:activityId", ActivityController.signUp.getActivity)
 

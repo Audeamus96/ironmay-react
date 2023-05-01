@@ -4,6 +4,12 @@
     border:10px;
   }
 
+.home {
+    height: 100vh;
+    padding-top: 5%;
+    border:10px;
+}
+
 .form {
     padding: 20px;
     border-style: solid;

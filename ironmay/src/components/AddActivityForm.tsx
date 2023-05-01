@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Button, Form } from "react-bootstrap";
 import { useForm } from 'react-hook-form';
 
+import styleUtils from '../styles/utils.module.css';
+
 import AuthContext from "../context/AuthProvider";
 import { ActivityCreationBody } from '../network/activities_api';
 import * as ActivityApi from '../network/activities_api';
@@ -30,6 +32,7 @@ const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
 
     return (
         <>
+            <h4>Add Activity</h4>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-3">
                     <Form.Label>Activity Type</Form.Label>
@@ -64,6 +67,7 @@ const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
                 <Button 
                     variant="primary"
                     type="submit"
+                    className={styleUtils.width100}
                     disabled={isSubmitting}
                 >
                     Submit

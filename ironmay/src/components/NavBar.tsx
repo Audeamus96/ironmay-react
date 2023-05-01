@@ -20,12 +20,14 @@ const NavBar = ({loggedInUser, onLogoutSuccessfull} : NavBarProps) => {
     }
 
     return (  
-        <Navbar bg="primary" variant="dark" expand="md" sticky="top">
+        <Navbar bg="dark" variant="dark" expand="md" sticky="top">
             <Container>
                 <NavbarBrand>
                     Ironmay
                 </NavbarBrand>
-                <Button onClick={logout}>
+                <Button 
+                    variant="outline-danger"
+                    onClick={logout}>
                     Logout
                 </Button>
 

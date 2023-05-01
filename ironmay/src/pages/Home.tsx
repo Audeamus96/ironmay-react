@@ -2,6 +2,10 @@ import React, { useState, useEffect, useContext  } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Table, Tabs, Tab, Row, Col, Container } from "react-bootstrap";
 
+import '../styles/login.css';
+import styleUtils from '../styles/utils.module.css';
+
+
 import AuthContext from "../context/AuthProvider";
 import NavBar from "../components/NavBar";
 import AddActivityForm from "../components/AddActivityForm";
@@ -57,7 +61,7 @@ const Home = () => {
     const [activities, setActivities] = useState<Activity[]>([]);
     const [teams, setTeams] = useState<Team[]>([]);
 
-    // Data for ables
+    // Data for ables`
     const [teamData, setTeamData] = useState<TeamTableData[]>([]);
     const [userData, setuserData] = useState<UserTableData[]>([]);
 
@@ -172,9 +176,10 @@ const Home = () => {
               loggedInUser={null}
               onLogoutSuccessfull={ () => {navigate("/login")}}
             />
-        <Container>
-            <Row>
-                <Col md={8}>
+        <div className='bg'>   
+        <Container className='home template 100-w 100-vh'>
+            <Row className="justify-content-md-center">
+                <Col lg={8} className='form'>
                 <Table>
                     <thead>
                         <tr>
@@ -183,7 +188,7 @@ const Home = () => {
                         <th>Running</th>
                         <th>Cycling</th>
                         <th>Swimming</th>
-                        <th>Ironmen Complete</th>
+                        <th>Ironmen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -229,15 +234,18 @@ const Home = () => {
                     </Tabs>
                 )}
                 </Col>
-                <Col>
+                <Col lg={4} className={styleUtils.marginTop20}>
+                <div className='form'>
                     <AddActivityForm  
                         onActivityAdded={(newActivity) => {
                             setActivities([...activities, newActivity]);}
                         }
                     />
+                </div>
                 </Col>
             </Row>
         </Container>
+        </div> 
         </>
       );
 }

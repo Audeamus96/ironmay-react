@@ -14,7 +14,13 @@ async function fetchWithError(input: RequestInfo, init?: RequestInit){
 
 export async function fetchTeams(): Promise<Team[]> {
     const response = await fetchWithError("/api/teams", {method: "GET"});
-    return response.json();
+    const teams = await response.json();
+    return teams.map((team: any) => ({
+        _id: team._id,
+        name: team.name,
+        createdAt: team.createdAt,
+        updatedAt: team.updatedAt
+    })) as Team[]
 }
 
 export interface TeamInput{

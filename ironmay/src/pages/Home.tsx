@@ -138,7 +138,8 @@ const Home = () => {
                 return {teamId: team._id ,teamName: team.name, runTotal, bikeTotal, swimTotal, ironmen};
             });
 
-            setTeamData(teamsWithTotals.map((x: any) => ({
+            setTeamData(teamsWithTotals.filter((team) => team.teamName !== 'admin')
+            .map((x: any) => ({
                 _id: x.teamId,
                 name: x.teamName,
                 runDistance: x.runTotal,

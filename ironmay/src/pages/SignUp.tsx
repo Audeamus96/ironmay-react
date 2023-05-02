@@ -103,7 +103,9 @@ const SignUp = () => {
             {...register("team", { required: "Must Choose a Team" })}
           >
             <option value="">Choose a team</option>
-            {teams.map((team) => (
+            {teams
+            .filter((team) => team.name !== 'admin')
+            .map((team) => (
               <option key={team.name} value={team._id}> {team.name} </option>
             ))}
           </Form.Select>

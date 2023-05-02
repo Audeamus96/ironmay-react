@@ -42,9 +42,8 @@ const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
                         {...register("activity_type", { required: "Must Choose an Activity" })}
                         >
                         <option value="">Choose an activity</option>
-                        <option value="run">Running</option>
+                        <option value="run">Running / Walking</option>
                         <option value="bike">Biking</option>
-                        <option value="swim">Swimming</option>
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                         {errors.activity_type?.message}
@@ -52,7 +51,7 @@ const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                <Form.Label>Distance</Form.Label>
+                <Form.Label>Distance (km)</Form.Label>
                     <Form.Control 
                         type="number" 
                         step=".01"

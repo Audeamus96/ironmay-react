@@ -16,24 +16,24 @@ import * as TeamApi from '../network/teams_api';
 import * as UserApi from '../network/users_api';
 import * as ActivityApi from '../network/activities_api';
 
-const calcIronMen = (rd:number, bd:number, sd:number): number => {
+const calcIronMen = (rd:number, bd:number): number => {
     const perc_runn = rd/42.2;
     const perc_cycl = bd/180.2;
-    const perc_swim = sd/3.86;
-    const min_irons = Math.floor(Math.min(perc_runn, perc_cycl, perc_swim));
+    const min_irons = Math.floor(Math.min(perc_runn, perc_cycl));
 
     const val_run = perc_runn - min_irons;
     const val_cycl = perc_cycl - min_irons;
-    const val_swim = perc_swim - min_irons;
 
-    // if the remainder of val_X is >= 1 set it to .33 else multiply it by .33
-    const total_run = val_run >= 1 ? .33 : val_run * .33;
-    const total_cycl = val_cycl >= 1 ? .33 : val_cycl * .33;
-    const total_swim = val_swim >= 1 ? .33 : val_swim * .33;
+    const total_run = val_run >= 1 ? .5 : val_run * .5;
+    const total_cycl = val_cycl >= 1 ? .5 : val_cycl * .5;
 
-    const ironmen = total_run + total_cycl + total_swim + min_irons;
+    const ironmen = total_run + total_cycl + min_irons;
     const ans = Math.ceil(ironmen * 100) / 100;
     return Math.round(ans * 100) / 100;
+}
+
+const round2decimals = (num:number) => {
+    return Math.round(num * 100) /100;
 }
 
 const Home = () => {
@@ -125,7 +125,7 @@ const Home = () => {
                 const runTotal =  getActivityTotals(team._id, "run");
                 const bikeTotal = getActivityTotals(team._id, "bike");
                 const swimTotal = getActivityTotals(team._id, "swim");
-                const ironmen = calcIronMen(runTotal, bikeTotal, swimTotal)
+                const ironmen = calcIronMen(runTotal, bikeTotal);
                 return {teamId: team._id ,teamName: team.name, runTotal, bikeTotal, swimTotal, ironmen};
             });
 
@@ -186,9 +186,8 @@ const Home = () => {
                         <tr>
                         <th>Rank</th>
                         <th>Team Name</th>
-                        <th>Running</th>
+                        <th>Running / Walking</th>
                         <th>Cycling</th>
-                        <th>Swimming</th>
                         <th>Ironmen</th>
                         </tr>
                     </thead>
@@ -197,9 +196,9 @@ const Home = () => {
                             <tr key={team.name}>
                                 <td>{index+1}</td>
                                 <td>{team.name}</td>
-                                <td>{team.runDistance}</td>
-                                <td>{team.bikeDistance}</td>
-                                <td>{team.swimDistance}</td>
+                                <td>{round2decimals(team.runDistance)}</td>
+                                <td>{round2decimals(team.bikeDistance)}</td>
+                                {/* <td>{team.swimDistance}</td> */}
                                 <td>{team.ironmen}</td>
                             </tr>
                         )}
@@ -214,18 +213,16 @@ const Home = () => {
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Running (km) </th>
+                                    <th>Running / Walking (km) </th>
                                     <th>Cycling (km) </th>
-                                    <th>Swimming (km) </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                     {userData.filter((user) => user.team === team._id).map((user) =>
                                         <tr key={user._id}>
                                             <td>{user.firstName} {user.lastName}</td>
-                                            <td>{user.runDistance}</td>
-                                            <td>{user.bikeDistance}</td>
-                                            <td>{user.swimDistance}</td>
+                                            <td>{round2decimals(user.runDistance)}</td>
+                                            <td>{round2decimals(user.bikeDistance)}</td>
                                         </tr>
                                     )}
                                 </tbody>

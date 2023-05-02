@@ -15,7 +15,7 @@ interface ActivityCreationProps {
 
 const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
     const { auth } = useContext(AuthContext);
-    const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm<ActivityCreationBody>();
+    const { register, handleSubmit, reset, formState: {errors, isSubmitting} } = useForm<ActivityCreationBody>();
     
     async function onSubmit(input: ActivityCreationBody) {
         try {
@@ -24,6 +24,7 @@ const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
             input.team = auth.team;
             const activityRes = await ActivityApi.createActivity(input);
             onActivityAdded(activityRes);
+            reset();
         } catch (error) {
             console.error(error);
             alert(error);

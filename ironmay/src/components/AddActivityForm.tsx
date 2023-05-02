@@ -55,6 +55,7 @@ const AddActivityForm = ({onActivityAdded} : ActivityCreationProps) => {
                 <Form.Label>Distance</Form.Label>
                     <Form.Control 
                         type="number" 
+                        step=".01"
                         placeholder="0"
                         isInvalid={!!errors.distance}
                         {...register("distance", { required: "Distance is required", min: {value:0, message:"distances cannot be negative"} })}

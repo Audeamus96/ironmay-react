@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext  } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, Table, Tabs, Tab, Row, Col, Container } from "react-bootstrap";
+import { Button, Form, Table, Tabs, Tab, Row, Col, Container, Alert } from "react-bootstrap";
 
 import '../styles/login.css';
 import styleUtils from '../styles/utils.module.css';
@@ -61,10 +61,19 @@ const Home = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [activities, setActivities] = useState<Activity[]>([]);
     const [teams, setTeams] = useState<Team[]>([]);
+    const [showAlert, setShowAlert] = useState(false);
 
     // Data for ables`
     const [teamData, setTeamData] = useState<TeamTableData[]>([]);
     const [userData, setuserData] = useState<UserTableData[]>([]);
+
+    const handleAlert = () => {
+        setShowAlert(true);
+    
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 2000);
+    };
 
     useEffect (() => {
         if (!auth){
@@ -233,10 +242,17 @@ const Home = () => {
                 )}
                 </Col>
                 <Col lg={4} className={styleUtils.marginTop20}>
+                {showAlert && (
+                    <Alert variant="success" onClose={() => setShowAlert(false)}>
+                    Activity Added!
+                    </Alert>
+                )}
                 <div className='form'>
                     <AddActivityForm  
                         onActivityAdded={(newActivity) => {
-                            setActivities([...activities, newActivity]);}
+                            setActivities([...activities, newActivity]);
+                            handleAlert();
+                            }
                         }
                     />
                 </div>

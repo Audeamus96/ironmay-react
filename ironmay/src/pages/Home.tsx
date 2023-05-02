@@ -32,7 +32,8 @@ const calcIronMen = (rd:number, bd:number, sd:number): number => {
     const total_swim = val_swim >= 1 ? .33 : val_swim * .33;
 
     const ironmen = total_run + total_cycl + total_swim + min_irons;
-    return Math.ceil(ironmen * 100) / 100;
+    const ans = Math.ceil(ironmen * 100) / 100;
+    return Math.round(ans * 100) / 100;
 }
 
 const Home = () => {

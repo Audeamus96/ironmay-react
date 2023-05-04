@@ -8,8 +8,6 @@ import styleUtils from '../styles/utils.module.css';
 import AuthContext from "../context/AuthProvider";
 import NavBar from "../components/NavBar";
 import AddActivityForm from "../components/AddActivityForm";
-import { Team } from "../models/team";
-import { User } from "../models/user";
 import { Activity } from "../models/activity";
 import * as TeamApi from '../network/teams_api';
 import * as UserApi from '../network/users_api';
@@ -84,7 +82,7 @@ const Home = () => {
             }
         }
         getSummaries();
-    }, [])
+    }, [activities])
 
     return (
         <>

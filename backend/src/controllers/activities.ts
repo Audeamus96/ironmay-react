@@ -149,6 +149,7 @@ export const getUserActivitySummary: RequestHandler = async (req, res, next) => 
                 $project: {
                   _id: 0,
                   userId: '$_id.user',
+                  teamId: { $arrayElemAt: ['$user.team', 0] },
                   firstName: { $arrayElemAt: ['$user.firstName', 0] },
                   lastName: { $arrayElemAt: ['$user.lastName', 0] },
                   runningDistance: { $round: ['$runningDistance', 2]},

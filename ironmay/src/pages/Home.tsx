@@ -140,13 +140,13 @@ const Home = () => {
                                     {
                                         userSummaries
                                         .filter((user) => user.teamId === team.id)
-                                        .map((user) => (
+                                        .map((user) => 
                                             <tr key={user.id}>
                                             <td>{user.firstName} {user.lastName}</td>
                                             <td>{round2decimals(user.runningTotal)}</td>
                                             <td>{round2decimals(user.bikingTotal)}</td>
                                             </tr>     
-                                        ))
+                                        )
                                     }
                                 </tbody>
                                 </Table>

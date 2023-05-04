@@ -51,7 +51,7 @@ export async function getTeamSummaries(): Promise<TeamSummary[]> {
     const response = await fetchWithError("/api/teams/summary");
     const teamSummaries = await response.json();
     return teamSummaries.map((teamSummary: any) => ({
-        id: teamSummary.userId,
+        id: teamSummary.teamId,
         name: teamSummary.teamName,
         runningTotal: teamSummary.runningDistance,
         bikingTotal: teamSummary.bikingDistance,

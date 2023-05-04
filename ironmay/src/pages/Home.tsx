@@ -5,7 +5,6 @@ import { Table, Tabs, Tab, Row, Col, Container, Alert } from "react-bootstrap";
 import '../styles/login.css';
 import styleUtils from '../styles/utils.module.css';
 
-
 import AuthContext from "../context/AuthProvider";
 import NavBar from "../components/NavBar";
 import AddActivityForm from "../components/AddActivityForm";
@@ -37,35 +36,13 @@ const round2decimals = (num:number) => {
 }
 
 const Home = () => {
-    interface TeamTableData{
-        _id: string,
-        name: string,
-        runDistance: number,
-        bikeDistance: number,
-        swimDistance: number,
-        ironmen: number,
-    }
-    
-    interface UserTableData{
-        _id: string,
-        firstName: string,
-        lastName: string,
-        team: string,
-        runDistance: number,
-        bikeDistance: number,
-        swimDistance: number
-    }
-
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
-    const [users, setUsers] = useState<User[]>([]);
-    const [activities, setActivities] = useState<Activity[]>([]);
-    const [teams, setTeams] = useState<Team[]>([]);
-    const [showAlert, setShowAlert] = useState(false);
 
-    // Data for ables`
-    const [teamData, setTeamData] = useState<TeamTableData[]>([]);
-    const [userData, setuserData] = useState<UserTableData[]>([]);
+    const [activities, setActivities] = useState<Activity[]>([]);
+    const [userSummaries, setUserSummaries] = useState<UserApi.UserSummary[]>([]);
+    const [teamSummaries, setTeamSummaries] = useState<TeamApi.TeamSummary[]>([]);
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleAlert = () => {
         setShowAlert(true);
@@ -83,18 +60,6 @@ const Home = () => {
     }, [auth, navigate]);
 
     useEffect (() => {
-        async function getUserData(){
-            try {
-                const users = await UserApi.getUsersData();
-                setUsers(users);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getUserData();
-    }, []);
-
-    useEffect (() => {
         async function getAllActivityData(){
             try {
                 const activities = await ActivityApi.getAllActivities();
@@ -107,79 +72,19 @@ const Home = () => {
     }, []);
 
     useEffect (() => {
-        async function getTeamsData(){
+        async function getSummaries() {
             try {
-                const teams = await TeamApi.fetchTeams();
-                setTeams(teams);
+                const userSummaries = await UserApi.getUserSummaries();
+                setUserSummaries(userSummaries);
+
+                const teamSummaries = await TeamApi.getTeamSummaries();
+                setTeamSummaries(teamSummaries);
             } catch (error) {
                 console.log(error);
             }
         }
-        getTeamsData();
-    }, []);
-
-    useEffect (() => {
-        async function TeamTableData(){
-
-            const getActivityTotals = (teamId: string, activityType: string): number => {
-                const teamMembers = users.filter((user) => user.team === teamId);
-                const teamActivities = activities.filter((activity) => 
-                    teamMembers.some((user) => user._id === activity.user));
-                const activityTypeActivities = teamActivities.filter((activity) => activity.activity_type === activityType);
-                const totalDistance = activityTypeActivities.reduce((total, activity) => total + activity.distance, 0);
-                return totalDistance;
-            };
-
-            const teamsWithTotals = teams.map((team) => {
-                const runTotal =  getActivityTotals(team._id, "run");
-                const bikeTotal = getActivityTotals(team._id, "bike");
-                const swimTotal = getActivityTotals(team._id, "swim");
-                const ironmen = calcIronMen(runTotal, bikeTotal);
-                return {teamId: team._id ,teamName: team.name, runTotal, bikeTotal, swimTotal, ironmen};
-            });
-
-            setTeamData(teamsWithTotals.filter((team) => team.teamName !== 'admin')
-            .map((x: any) => ({
-                _id: x.teamId,
-                name: x.teamName,
-                runDistance: x.runTotal,
-                bikeDistance: x.bikeTotal,
-                swimDistance: x.swimTotal,
-                ironmen: x.ironmen,
-            })) as TeamTableData[]);
-        }
-        TeamTableData();
-    }, [activities, teams, users]);
-
-    useEffect (() => {
-        const getActivityTotals = (userId: string, activityType: string): number => {
-            const userActivities = activities.filter((activity) => userId === activity.user);
-            const activityTypeActivities = userActivities.filter((activity) => activity.activity_type === activityType);
-            const totalDistance = activityTypeActivities.reduce((total, activity) => total + activity.distance, 0);
-            return totalDistance;
-        };
-
-        async function UserTableTotals() {
-            const usersWithTotals = users.map((user) => {
-                const runTotal =  getActivityTotals(user._id, "run");
-                const bikeTotal = getActivityTotals(user._id, "bike");
-                const swimTotal = getActivityTotals(user._id, "swim");
-                return {userID: user._id, firstName: user.firstName, 
-                    lastName: user.lastName, team: user.team,
-                    runTotal, bikeTotal, swimTotal }
-            });
-            setuserData(usersWithTotals.map((x: any) => ({
-                _id: x.userID,
-                firstName: x.firstName,
-                lastName: x.lastName,
-                team: x.team,
-                runDistance: x.runTotal,
-                bikeDistance: x.bikeTotal,
-                swimDistance: x.swimTotal,
-            })) as UserTableData[]);
-        }
-        UserTableTotals();
-    }, [activities, users])
+        getSummaries();
+    }, [])
 
     return (
         <>
@@ -202,23 +107,29 @@ const Home = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {teamData.sort((a,b) => b.ironmen - a.ironmen).map((team, index) =>
-                            <tr key={team.name}>
-                                <td>{index+1}</td>
-                                <td>{team.name}</td>
-                                <td>{round2decimals(team.runDistance)}</td>
-                                <td>{round2decimals(team.bikeDistance)}</td>
-                                {/* <td>{team.swimDistance}</td> */}
-                                <td>{team.ironmen}</td>
-                            </tr>
-                        )}
+                        {
+                            teamSummaries
+                            .filter((team) => team.name !== 'admin') // admin team is for testing
+                            .map((team, index) => 
+                                <tr key={team.name}>
+                                    <td>{index+1}</td>
+                                    <td>{team.name}</td>
+                                    <td>{round2decimals(team.runningTotal)}</td>
+                                    <td>{round2decimals(team.bikingTotal)}</td>
+                                    <td>{calcIronMen(team.runningTotal, team.bikingTotal)}</td>
+                                </tr>
+                            )
+                        }
                     </tbody>
                     </Table>
                     <br/>
-                {teamData.length > 0 && (
+                {teamSummaries.length > 0 && (
                     <Tabs defaultActiveKey={auth?.team}>
-                        {teamData.map((team) =>(
-                            <Tab eventKey={team._id} title={team.name} key={team._id}>
+                        {
+                            teamSummaries
+                            .filter((team) => team.name !== 'admin')
+                            .map((team) => (
+                                <Tab eventKey={team.id} title={team.name} key={team.id}>
                                 <Table>
                                 <thead>
                                 <tr>
@@ -228,17 +139,22 @@ const Home = () => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    {userData.filter((user) => user.team === team._id).map((user) =>
-                                        <tr key={user._id}>
+                                    {
+                                        userSummaries
+                                        .filter((user) => user.teamId === team.id)
+                                        .map((user) => (
+                                            <tr key={user.id}>
                                             <td>{user.firstName} {user.lastName}</td>
-                                            <td>{round2decimals(user.runDistance)}</td>
-                                            <td>{round2decimals(user.bikeDistance)}</td>
-                                        </tr>
-                                    )}
+                                            <td>{round2decimals(user.runningTotal)}</td>
+                                            <td>{round2decimals(user.bikingTotal)}</td>
+                                            </tr>     
+                                        ))
+                                    }
                                 </tbody>
                                 </Table>
-                            </Tab>
-                        ))}
+                                </Tab>
+                            ))
+                        }
                     </Tabs>
                 )}
                 </Col>

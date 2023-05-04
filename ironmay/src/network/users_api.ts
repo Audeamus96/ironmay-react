@@ -77,3 +77,27 @@ export async function getUsersData(): Promise<User[]> {
         team: user.team
     })) as User[]
 }
+
+export interface UserSummary {
+    id: string,
+    teamId: string,
+    firstName: string,
+    lastName: string,
+    runningTotal: number,
+    bikingTotal: number,
+    swimmingTotal: number,
+}
+
+export async function getUserSummaries(): Promise<UserSummary[]> {
+    const response = await fetchWithError("/api/users/summary");
+    const userSummaries = await response.json();
+    return userSummaries.map((userSummary: any) => ({
+        id: userSummary.userId,
+        teamId: userSummary.teamId,
+        firstName: userSummary.firstName,
+        lastName: userSummary.lastName,
+        runningTotal: userSummary.runningDistance,
+        bikingTotal: userSummary.bikingDistance,
+        swimmingTotal: userSummary.swimmingDistance,
+    })) as UserSummary[]
+}

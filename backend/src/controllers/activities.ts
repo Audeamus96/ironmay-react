@@ -36,7 +36,7 @@ interface ActivityBody{
     team?: Schema.Types.ObjectId,
 }
 
-export const createActivity: RequestHandler<unknown, unknown, ActivityBody, unknown> =async (req, res, next) => {
+export const createActivity: RequestHandler<unknown, unknown, ActivityBody, unknown> = async (req, res, next) => {
     const activity_type = req.body.activity_type;
     const distance = req.body.distance;
     const user = req.body.user;
@@ -83,5 +83,84 @@ export const createActivity: RequestHandler<unknown, unknown, ActivityBody, unkn
             next(error);
         }
         
+    }
+}
+
+// Summary of each teams activities (sums up distance for each activity type)
+export const getTeamActivitySummary: RequestHandler = async (req, res, next) => {
+    try {
+        const teamSummaryPipeline = [
+            {
+                $group: {
+                  _id: {team: '$team'}, 
+                  runningDistance: { $sum: { $cond: [{ $eq: ['$activity_type', 'run'] }, '$distance', 0] } },
+                  bikingDistance: { $sum: { $cond: [{ $eq: ['$activity_type', 'bike'] }, '$distance', 0] } },
+                  swimmingDistance: { $sum: { $cond: [{ $eq: ['$activity_type', 'swim'] }, '$distance', 0] } },
+                }
+            },
+            {
+                $lookup: {
+                  from: 'teams',
+                  localField: '_id.team',
+                  foreignField: '_id',
+                  as: 'team'
+                }
+            },
+            {
+                $project: {
+                  _id: 0,
+                  teamId: '$_id.team',
+                  teamName: { $arrayElemAt: ['$team.name', 0] },
+                  runningDistance: { $round: ['$runningDistance', 2]},
+                  bikingDistance: { $round: ['$bikingDistance', 2]},
+                  swimmingDistance: { $round: ['$swimmingDistance', 2]},
+                }
+            },
+            ];
+        
+        const teamSummaries = await ActivityModel.aggregate(teamSummaryPipeline);
+        res.status(200).json(teamSummaries);
+    } catch (error) {
+        next(error);
+    }
+}
+
+// Summary of each users activities (sums up distance for each activity type)
+export const getUserActivitySummary: RequestHandler = async (req, res, next) => {
+    try {
+        const UserSummaryPipeline = [
+            {
+                $group: {
+                  _id: {user: '$user'}, 
+                  runningDistance: { $sum: { $cond: [{ $eq: ['$activity_type', 'run'] }, '$distance', 0] } },
+                  bikingDistance: { $sum: { $cond: [{ $eq: ['$activity_type', 'bike'] }, '$distance', 0] } },
+                  swimmingDistance: { $sum: { $cond: [{ $eq: ['$activity_type', 'swim'] }, '$distance', 0] } },
+                }
+            },
+            {
+                $lookup: {
+                  from: 'users',
+                  localField: '_id.user',
+                  foreignField: '_id',
+                  as: 'user'
+                }
+            },
+            {
+                $project: {
+                  _id: 0,
+                  userId: '$_id.user',
+                  firstName: { $arrayElemAt: ['$user.firstName', 0] },
+                  lastName: { $arrayElemAt: ['$user.lastName', 0] },
+                  runningDistance: { $round: ['$runningDistance', 2]},
+                  bikingDistance: { $round: ['$bikingDistance', 2]},
+                  swimmingDistance: { $round: ['$swimmingDistance', 2]},
+                }
+            },
+            ];
+        
+        const userSummaries = await ActivityModel.aggregate(UserSummaryPipeline);
+        res.status(200).json(userSummaries);
+    } catch (error) {
+        next(error);
     }
 }

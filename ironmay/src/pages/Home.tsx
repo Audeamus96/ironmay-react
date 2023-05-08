@@ -7,27 +7,13 @@ import styleUtils from '../styles/utils.module.css';
 
 import AuthContext from "../context/AuthProvider";
 import NavBar from "../components/NavBar";
+import { calcIronMen } from '../utils/util_functions';
+import { UserSummary } from '../models/user';
 import AddActivityForm from "../components/AddActivityForm";
 import { Activity } from "../models/activity";
 import * as TeamApi from '../network/teams_api';
 import * as UserApi from '../network/users_api';
 import * as ActivityApi from '../network/activities_api';
-
-const calcIronMen = (rd:number, bd:number): number => {
-    const perc_runn = rd/42.2;
-    const perc_cycl = bd/180.2;
-    const min_irons = Math.floor(Math.min(perc_runn, perc_cycl));
-
-    const val_run = perc_runn - min_irons;
-    const val_cycl = perc_cycl - min_irons;
-
-    const total_run = val_run >= 1 ? .5 : val_run * .5;
-    const total_cycl = val_cycl >= 1 ? .5 : val_cycl * .5;
-
-    const ironmen = total_run + total_cycl + min_irons;
-    const ans = Math.ceil(ironmen * 100) / 100;
-    return Math.round(ans * 100) / 100;
-}
 
 const round2decimals = (num:number) => {
     return Math.round(num * 100) /100;
@@ -38,7 +24,7 @@ const Home = () => {
     const { auth } = useContext(AuthContext);
 
     const [activities, setActivities] = useState<Activity[]>([]);
-    const [userSummaries, setUserSummaries] = useState<UserApi.UserSummary[]>([]);
+    const [userSummaries, setUserSummaries] = useState<UserSummary[]>([]);
     const [teamSummaries, setTeamSummaries] = useState<TeamApi.TeamSummary[]>([]);
     const [showAlert, setShowAlert] = useState(false);
 

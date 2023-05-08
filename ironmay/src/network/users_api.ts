@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User, UserSummary } from "../models/user";
 
 // throws error if response code is not "ok"
 async function fetchWithError(input: RequestInfo, init?: RequestInit){
@@ -78,15 +78,15 @@ export async function getUsersData(): Promise<User[]> {
     })) as User[]
 }
 
-export interface UserSummary {
-    id: string,
-    teamId: string,
-    firstName: string,
-    lastName: string,
-    runningTotal: number,
-    bikingTotal: number,
-    swimmingTotal: number,
-}
+// export interface UserSummary {
+//     id: string,
+//     teamId: string,
+//     firstName: string,
+//     lastName: string,
+//     runningTotal: number,
+//     bikingTotal: number,
+//     swimmingTotal: number,
+// }
 
 export async function getUserSummaries(): Promise<UserSummary[]> {
     const response = await fetchWithError("/api/users/summary");

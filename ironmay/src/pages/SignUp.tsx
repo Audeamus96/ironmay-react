@@ -51,7 +51,7 @@ const SignUp = () => {
     {teamCreatedAlert && (
         <TempAlert variant='success' message='Team successfully created!'/>
     )}
-    <Container className='main template justify-content-center aligh-items-center 100-w 100-vh'>
+    <Container className='main2 template justify-content-center aligh-items-center 100-w 100-vh'>
     <Row className="justify-content-md-center">
      <Col lg={6} className='form'>
       <h1 className='alignCenter'> Sign up</h1>

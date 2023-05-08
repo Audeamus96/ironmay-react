@@ -91,7 +91,7 @@ const Home = () => {
         <Container className='home template 100-w 100-vh'>
             <Row className="justify-content-md-center">
                 <Col lg={8} className='form'>
-                <Table>
+                <Table responsive>
                     <thead>
                         <tr>
                         <th>Rank</th>

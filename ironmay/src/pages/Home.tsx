@@ -14,7 +14,8 @@ import AddActivityForm from "../components/AddActivityForm";
 import * as TeamApi from '../network/teams_api';
 import * as UserApi from '../network/users_api';
 
-interface TeamSummaryCalc extends TeamSummary{
+// Team summary information interface for table rows
+interface TeamSummaryTRow extends TeamSummary{
     ironmen: number
 }
 
@@ -23,7 +24,7 @@ const Home = () => {
     const { auth } = useContext(AuthContext);
 
     const [userSummaries, setUserSummaries] = useState<UserSummary[]>([]);
-    const [teamSummaries, setTeamSummaries] = useState<TeamSummaryCalc[]>([]);
+    const [teamSummaries, setTeamSummaries] = useState<TeamSummaryTRow[]>([]);
     const [summariesTrigger, setSummariesTrigger] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -55,7 +56,7 @@ const Home = () => {
                     bikingTotal: teamSummary.bikingTotal,
                     swimmingTotal: teamSummary.swimmingTotal,
                     ironmen: calcIronMen(teamSummary.runningTotal, teamSummary.bikingTotal),
-                })) as TeamSummaryCalc[]);
+                })) as TeamSummaryTRow[]);
             } catch (error) {
                 console.log(error);
             }
@@ -151,7 +152,7 @@ const Home = () => {
                 <div className='form'>
                     <AddActivityForm  
                         onActivityAdded={(newActivity) => {
-                            setSummariesTrigger(true);
+                            setSummariesTrigger(true); //triggers useffect for summaries
                             triggerAlert();
                             }
                         }

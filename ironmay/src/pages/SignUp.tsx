@@ -112,12 +112,12 @@ const SignUp = () => {
           <Form.Control.Feedback type="invalid">
             {errors.team?.message}
           </Form.Control.Feedback>
-          <Form.Text muted>
+          {/* <Form.Text muted>
             Or create a team by{" "}
             <a href="#" onClick={() => setShowAddTeamDialog(true)}>
               clicking here
             </a>
-          </Form.Text>
+          </Form.Text> */}
         </Form.Group>
 
         <Form.Group className="mb-3">

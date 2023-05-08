@@ -143,7 +143,7 @@ const SignUp = () => {
         </Button>
         <br/>
         <Form.Text muted>
-           Already a user? click <a href="/login">here</a> to login up.
+           Already a user? click <a href="/login">here</a> to login.
         </Form.Text>
       </Form>
      

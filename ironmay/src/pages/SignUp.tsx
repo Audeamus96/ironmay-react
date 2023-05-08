@@ -51,7 +51,7 @@ const SignUp = () => {
     {teamCreatedAlert && (
         <TempAlert variant='success' message='Team successfully created!'/>
     )}
-    <Container className='main template justify-content-center aligh-items-center 100-w 100-vh'>
+    <Container className='main2 template justify-content-center aligh-items-center 100-w 100-vh'>
     <Row className="justify-content-md-center">
      <Col lg={6} className='form'>
       <h1 className='alignCenter'> Sign up</h1>
@@ -112,12 +112,12 @@ const SignUp = () => {
           <Form.Control.Feedback type="invalid">
             {errors.team?.message}
           </Form.Control.Feedback>
-          <Form.Text muted>
+          {/* <Form.Text muted>
             Or create a team by{" "}
             <a href="#" onClick={() => setShowAddTeamDialog(true)}>
               clicking here
             </a>
-          </Form.Text>
+          </Form.Text> */}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -143,7 +143,7 @@ const SignUp = () => {
         </Button>
         <br/>
         <Form.Text muted>
-           Already a user? click <a href="/login">here</a> to login up.
+           Already a user? click <a href="/login">here</a> to login.
         </Form.Text>
       </Form>
      

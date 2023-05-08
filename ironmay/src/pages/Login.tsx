@@ -18,7 +18,6 @@ const Login = () => {
     async function onSubmit(input: LoginCredentials) {
         try {
           const user = await UserApi.login(input);
-          console.log(user);
           setAuth(user);
           navigate("/home");
         } catch (error) {

@@ -3,7 +3,7 @@ import { BrowserRouter as Router} from 'react-router-dom';
 
 import * as UserApi from "./network/users_api";
 import Routes from "./routes/Routes";
-import AuthContext, { AuthContextProvider } from "./context/AuthProvider";
+import { AuthContextProvider } from "./context/AuthProvider";
 import { User } from "./models/user";
 
 function App() {
@@ -16,7 +16,8 @@ function App() {
                 const user = await UserApi.getLoggedInUser();
                 setAuth(user);
             } catch (error) {
-                console.error(error);
+                console.clear();
+                console.error("No valid session found, authorization not granted");
             } finally {
                 setIsLoading(false);
             }

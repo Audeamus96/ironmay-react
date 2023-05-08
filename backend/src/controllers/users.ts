@@ -106,8 +106,8 @@ export const login: RequestHandler<unknown, unknown, LoginBody, unknown> = async
         req.session.userId = user._id;
         res.status(201).json({
             _id: user._id,
-            firstName: user._id,
-            lastName: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
             team: user.team
         });
         

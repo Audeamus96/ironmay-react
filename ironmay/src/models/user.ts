@@ -5,3 +5,13 @@ export interface User {
     email: string,
     team: string,
 }
+
+export interface UserSummary {
+    id: string,
+    teamId: string,
+    firstName: string,
+    lastName: string,
+    runningTotal: number,
+    bikingTotal: number,
+    swimmingTotal: number,
+}

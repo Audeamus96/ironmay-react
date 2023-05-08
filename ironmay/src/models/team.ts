@@ -4,3 +4,11 @@ export interface Team {
     createdAt: string,
     updatedAt: string,
 }
+
+export interface TeamSummary {
+    id: string,
+    name: string,
+    runningTotal: number,
+    bikingTotal: number,
+    swimmingTotal: number,
+}

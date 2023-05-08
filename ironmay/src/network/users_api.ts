@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User, UserSummary } from "../models/user";
 
 // throws error if response code is not "ok"
 async function fetchWithError(input: RequestInfo, init?: RequestInit){
@@ -76,4 +76,18 @@ export async function getUsersData(): Promise<User[]> {
         email: user.email,
         team: user.team
     })) as User[]
+}
+
+export async function getUserSummaries(): Promise<UserSummary[]> {
+    const response = await fetchWithError("/api/users/summary");
+    const userSummaries = await response.json();
+    return userSummaries.map((userSummary: any) => ({
+        id: userSummary.userId,
+        teamId: userSummary.teamId,
+        firstName: userSummary.firstName,
+        lastName: userSummary.lastName,
+        runningTotal: userSummary.runningDistance,
+        bikingTotal: userSummary.bikingDistance,
+        swimmingTotal: userSummary.swimmingDistance,
+    })) as UserSummary[]
 }

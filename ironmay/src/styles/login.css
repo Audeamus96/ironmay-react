@@ -2,7 +2,13 @@
     height: 100vh;
     padding-top: 20%;
     border:10px;
-  }
+}
+
+.main2 {
+    height: 100vh;
+    padding-top: 10%;
+    border:10px;
+}
 
 .home {
     height: 100vh;

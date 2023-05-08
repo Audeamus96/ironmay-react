@@ -78,16 +78,6 @@ export async function getUsersData(): Promise<User[]> {
     })) as User[]
 }
 
-// export interface UserSummary {
-//     id: string,
-//     teamId: string,
-//     firstName: string,
-//     lastName: string,
-//     runningTotal: number,
-//     bikingTotal: number,
-//     swimmingTotal: number,
-// }
-
 export async function getUserSummaries(): Promise<UserSummary[]> {
     const response = await fetchWithError("/api/users/summary");
     const userSummaries = await response.json();

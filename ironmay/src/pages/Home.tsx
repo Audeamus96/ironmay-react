@@ -7,16 +7,17 @@ import styleUtils from '../styles/utils.module.css';
 
 import AuthContext from "../context/AuthProvider";
 import NavBar from "../components/NavBar";
-import { calcIronMen } from '../utils/util_functions';
+import { calcIronMen, round2decimals } from '../utils/util_functions';
 import { UserSummary } from '../models/user';
+import { TeamSummary } from '../models/team';
 import AddActivityForm from "../components/AddActivityForm";
 import { Activity } from "../models/activity";
 import * as TeamApi from '../network/teams_api';
 import * as UserApi from '../network/users_api';
 import * as ActivityApi from '../network/activities_api';
 
-const round2decimals = (num:number) => {
-    return Math.round(num * 100) /100;
+interface TeamSummaryCalc extends TeamSummary{
+    ironmen: number
 }
 
 const Home = () => {
@@ -25,16 +26,19 @@ const Home = () => {
 
     const [activities, setActivities] = useState<Activity[]>([]);
     const [userSummaries, setUserSummaries] = useState<UserSummary[]>([]);
-    const [teamSummaries, setTeamSummaries] = useState<TeamApi.TeamSummary[]>([]);
+    const [teamSummaries, setTeamSummaries] = useState<TeamSummaryCalc[]>([]);
     const [showAlert, setShowAlert] = useState(false);
 
-    const handleAlert = () => {
+    const triggerAlert = () => {
         setShowAlert(true);
-    
         setTimeout(() => {
           setShowAlert(false);
         }, 2000);
     };
+
+    const addActivity = (newActivity: Activity) => {
+
+    }
 
     useEffect (() => {
         if (!auth){
@@ -62,7 +66,14 @@ const Home = () => {
                 setUserSummaries(userSummaries);
 
                 const teamSummaries = await TeamApi.getTeamSummaries();
-                setTeamSummaries(teamSummaries);
+                setTeamSummaries(teamSummaries.map((teamSummary: TeamSummary) => ({
+                    id: teamSummary.id,
+                    name: teamSummary.name,
+                    runningTotal: teamSummary.runningTotal,
+                    bikingTotal: teamSummary.bikingTotal,
+                    swimmingTotal: teamSummary.swimmingTotal,
+                    ironmen: calcIronMen(teamSummary.runningTotal, teamSummary.bikingTotal),
+                })) as TeamSummaryCalc[]);
             } catch (error) {
                 console.log(error);
             }
@@ -94,13 +105,14 @@ const Home = () => {
                         {
                             teamSummaries
                             .filter((team) => team.name !== 'admin') // admin team is for testing
+                            .sort((a, b) => b.ironmen - a.ironmen)
                             .map((team, index) => 
                                 <tr key={team.name}>
                                     <td>{index+1}</td>
                                     <td>{team.name}</td>
                                     <td>{round2decimals(team.runningTotal)}</td>
                                     <td>{round2decimals(team.bikingTotal)}</td>
-                                    <td>{calcIronMen(team.runningTotal, team.bikingTotal)}</td>
+                                    <td>{round2decimals(team.ironmen)}</td>
                                 </tr>
                             )
                         }
@@ -152,7 +164,8 @@ const Home = () => {
                     <AddActivityForm  
                         onActivityAdded={(newActivity) => {
                             setActivities([...activities, newActivity]);
-                            handleAlert();
+                            addActivity(newActivity);
+                            triggerAlert();
                             }
                         }
                     />

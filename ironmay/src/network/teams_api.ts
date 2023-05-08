@@ -1,4 +1,4 @@
-import { Team } from "../models/team";
+import { Team, TeamSummary } from "../models/team";
 
 // throws error if response code is not "ok"
 async function fetchWithError(input: RequestInfo, init?: RequestInit){
@@ -39,13 +39,13 @@ export async function createTeam(team: TeamInput): Promise<Team> {
     return response.json();
 }
 
-export interface TeamSummary {
-    id: string,
-    name: string,
-    runningTotal: number,
-    bikingTotal: number,
-    swimmingTotal: number,
-}
+// export interface TeamSummary {
+//     id: string,
+//     name: string,
+//     runningTotal: number,
+//     bikingTotal: number,
+//     swimmingTotal: number,
+// }
 
 export async function getTeamSummaries(): Promise<TeamSummary[]> {
     const response = await fetchWithError("/api/teams/summary");

@@ -13,3 +13,7 @@ export const calcIronMen = (rd:number, bd:number): number => {
     const ans = Math.ceil(ironmen * 100) / 100;
     return Math.round(ans * 100) / 100;
 }
+
+export const round2decimals = (num:number) => {
+    return Math.round(num * 100) /100;
+}

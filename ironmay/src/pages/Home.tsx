@@ -11,10 +11,8 @@ import { calcIronMen, round2decimals } from '../utils/util_functions';
 import { UserSummary } from '../models/user';
 import { TeamSummary } from '../models/team';
 import AddActivityForm from "../components/AddActivityForm";
-import { Activity } from "../models/activity";
 import * as TeamApi from '../network/teams_api';
 import * as UserApi from '../network/users_api';
-import * as ActivityApi from '../network/activities_api';
 
 interface TeamSummaryCalc extends TeamSummary{
     ironmen: number
@@ -24,9 +22,9 @@ const Home = () => {
     const navigate = useNavigate();
     const { auth } = useContext(AuthContext);
 
-    const [activities, setActivities] = useState<Activity[]>([]);
     const [userSummaries, setUserSummaries] = useState<UserSummary[]>([]);
     const [teamSummaries, setTeamSummaries] = useState<TeamSummaryCalc[]>([]);
+    const [summariesTrigger, setSummariesTrigger] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
     const triggerAlert = () => {
@@ -36,28 +34,12 @@ const Home = () => {
         }, 2000);
     };
 
-    const addActivity = (newActivity: Activity) => {
-
-    }
-
     useEffect (() => {
         if (!auth){
-            console.error("NOT AUTHORIZED - redirecting to login");
+            console.error("USER NOT AUTHORIZED - redirecting to login");
             navigate("/login");
         }
     }, [auth, navigate]);
-
-    useEffect (() => {
-        async function getAllActivityData(){
-            try {
-                const activities = await ActivityApi.getAllActivities();
-                setActivities(activities);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getAllActivityData();
-    }, []);
 
     useEffect (() => {
         async function getSummaries() {
@@ -79,7 +61,11 @@ const Home = () => {
             }
         }
         getSummaries();
-    }, [activities])
+    }, [summariesTrigger])
+
+    if((teamSummaries === undefined) || (userSummaries === undefined)) {
+        return <div>Loading</div>;
+    }
 
     return (
         <>
@@ -124,6 +110,7 @@ const Home = () => {
                         {
                             teamSummaries
                             .filter((team) => team.name !== 'admin')
+                            .sort((a, b) => a.name.localeCompare(b.name))
                             .map((team) => (
                                 <Tab eventKey={team.id} title={team.name} key={team.id}>
                                 <Table>
@@ -138,6 +125,7 @@ const Home = () => {
                                     {
                                         userSummaries
                                         .filter((user) => user.teamId === team.id)
+                                        .sort((a, b) => a.firstName.localeCompare(b.firstName))
                                         .map((user) => 
                                             <tr key={user.id}>
                                             <td>{user.firstName} {user.lastName}</td>
@@ -163,8 +151,7 @@ const Home = () => {
                 <div className='form'>
                     <AddActivityForm  
                         onActivityAdded={(newActivity) => {
-                            setActivities([...activities, newActivity]);
-                            addActivity(newActivity);
+                            setSummariesTrigger(true);
                             triggerAlert();
                             }
                         }

@@ -16,7 +16,7 @@ function App() {
                 const user = await UserApi.getLoggedInUser();
                 setAuth(user);
             } catch (error) {
-                console.error(error);
+                console.error("No valid session found, authorization not granted");
             } finally {
                 setIsLoading(false);
             }
